@@ -17,14 +17,6 @@ function App() {
   }
 
   useEffect(() => {
-    fetch("/api")
-      .then((response) => response.json())
-      .then((data) => {
-        alert(data.hello);
-      });
-  }, []);
-
-  useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime((prev) => {
         return prev - 1 / divider;
