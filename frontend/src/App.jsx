@@ -37,12 +37,17 @@ function App() {
         TimeOur
       </h1>
       <div
-        className={"flex  bg-green-400 w-[95lvw] rounded-t-xl items-end"}
+        className={
+          "flex bg-green-400 w-[95lvw] rounded-t-xl relative justify-center items-center"
+        }
         style={{
           height: `${currentTime + "lvh"}`,
         }}
       >
-        <div className="flex w-full justify-between px-3 text-sm pb-2">
+        <p className="text-9xl text-green-500">
+          {Math.round((currentTime / 100) * 10)}
+        </p>
+        <div className="flex w-full bottom-0 justify-between px-3 absolute text-sm pb-2">
           <ul className="flex flex-col justify-end text-green-800 font-light">
             <li>timevalue = {totalTime}</li>
             <li>current = {(currentTime / 100) * 10}</li>
