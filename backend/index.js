@@ -4,13 +4,13 @@ import dotenv from "dotenv";
 import express from "express";
 import path from "path";
 
-dotenv.config();
+// dotenv.config();
 
 const client = new Client({
-  connectionString: procces.env.PGURI,
+  connectionString: process.env.PGURI,
 });
 
-client.connect();
+// client.connect();
 
 const app = express(),
   port = process.env.PORT || 3000;
