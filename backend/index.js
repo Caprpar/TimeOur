@@ -1,6 +1,16 @@
+import { Client } from "pg";
+import cors from "cors";
+import dotenv from "dotenv";
 import express from "express";
 import path from "path";
-import cors from "cors";
+
+dotenv.config();
+
+const client = new Client({
+  connectionString: procces.env.PGURI,
+});
+
+client.connect();
 
 const app = express(),
   port = process.env.PORT || 3000;
