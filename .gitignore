@@ -1,2 +1,4 @@
 docker-compose.yml
 notes.md
+dbGraph.dbml
+querys.sql
