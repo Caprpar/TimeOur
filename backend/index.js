@@ -4,13 +4,13 @@ import dotenv from "dotenv";
 import express from "express";
 import path from "path";
 
-// dotenv.config();
+dotenv.config();
 
 const client = new Client({
   connectionString: process.env.PGURI,
 });
 
-// client.connect();
+client.connect();
 
 const app = express(),
   port = process.env.PORT || 3000;
@@ -19,8 +19,9 @@ const frontend = path.join(path.resolve(), "dist");
 
 app.use(cors());
 
-app.get("/api", (_request, response) => {
-  response.send({ hello: "world" });
+app.get("/api", async (_request, response) => {
+  const { rows } = await client.query("SELECT * FROM cities WHERE name = $1", ["Stockholm"]);
+  response.send(rows);
 });
 
 app.use(express.static(frontend));
