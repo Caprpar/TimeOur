@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Ubuntu, Arial, Helvetica, sans-serif;
+}
+
+#root,
+body,
+html {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 100lvw;
+  height: 100lvh;
+}
