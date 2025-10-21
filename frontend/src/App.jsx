@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import "./App.css";
-import classNames from "classnames/bind";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 
 function App() {
@@ -25,6 +24,18 @@ function App() {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ remaining_minutes: currentTime }),
+    });
+  }, [currentTime]);
+
+  // skapa useeffect som laddar upp tid till backend vid tryck
 
   return (
     <div

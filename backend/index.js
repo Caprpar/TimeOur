@@ -18,13 +18,25 @@ const app = express(),
 const frontend = path.join(path.resolve(), "dist");
 
 app.use(cors());
+app.use(express.json());
 
 app.get("/api", async (_request, response) => {
-  const { rows } = await client.query("SELECT * FROM cities WHERE name = $1", ["Stockholm"]);
+  const { rows } = await client.query("SELECT * FROM timer");
   response.send(rows);
 });
 
-app.use(express.static(frontend));
+app.post("/api", async (request, response) => {
+  const { remaining_minutes } = request.body;
+  const { rows } = await client.query(`
+    UPDATE timer
+    SET
+      remaining_minutes = ${remaining_minutes}
+    WHERE id = 1;
+`);
+  response.send(rows);
+});
+
+app.use(express.static(path.join(path.resolve(), "dist")));
 
 app.listen(port, () => {
   console.log("Vårt backend är redo\n" + `http://localhost:${port}/`);
