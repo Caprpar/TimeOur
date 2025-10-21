@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 
 function App() {
-  const [totalTime, _setTotalTime] = useState(1 / 6);
+  const [totalTime, _setTotalTime] = useState(50);
   const [currentTime, setCurrentTime] = useState(0);
   const divider = 10;
   const yAxis = useRef(0);
@@ -28,19 +28,31 @@ function App() {
 
   return (
     <div
-      className="flex w-full justify-center  h-full items-end"
+      className="flex w-full justify-center  h-full items-end relative"
       onClick={(e) => {
         handlePress(e);
       }}
     >
+      <h1 className="absolute top-5 left-5 font-black text-zinc-900 ">
+        TimeOur
+      </h1>
       <div
-        className={classNames("bg-green-400 w-[95lvw] rounded-t-xl")}
+        className={"flex  bg-green-400 w-[95lvw] rounded-t-xl items-end"}
         style={{
           height: `${currentTime + "lvh"}`,
         }}
       >
-        <h1>timevalue = {totalTime}</h1>
-        <h1>current = {(currentTime / 100) * 10}</h1>
+        <div className="flex w-full justify-between px-3 text-sm pb-2">
+          <ul className="flex flex-col justify-end text-green-800 font-light">
+            <li>timevalue = {totalTime}</li>
+            <li>current = {(currentTime / 100) * 10}</li>
+          </ul>
+          <ul className="flex flex-col items-end text-green-800 font-light">
+            <li className="font-medium">Last changed </li>
+            <li>1a dec 2025</li>
+            <li>13:41</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
