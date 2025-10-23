@@ -26,7 +26,6 @@ app.get("/api", async (_request, response) => {
 app.post("/api", async (request, response) => {
   const { remaining_minutes } = request.body;
   const rounded = Math.round(remaining_minutes);
-  console.log(rounded);
   const { rows } = await client.query(
     `UPDATE timer
        SET remaining_minutes = $1
