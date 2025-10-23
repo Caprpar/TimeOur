@@ -6,10 +6,9 @@ function App() {
   const [totalTime, _setTotalTime] = useState(60);
   const [barHeight, setBarHeight] = useState(0);
   const [displayTime, setDisplayTime] = useState(0);
-  // const [currentTime, setCurrentTime] = useState(null);
 
   const currentTime = useRef(fetchTime());
-  const divider = 10;
+  const divider = 1;
   const yAxis = useRef(0);
   const { height } = useWindowDimensions();
 
@@ -49,6 +48,7 @@ function App() {
 
         interval = setInterval(() => {
           setBarHeight(currentTime.current);
+          setDisplayTime(Math.round((currentTime.current / 100) * totalTime));
           currentTime.current -= 1 / divider;
         }, (totalTime * 1000) / divider); // Avgör hur sällan baren ska droppas
       });
@@ -83,7 +83,7 @@ function App() {
         }}
       >
         <p className="text-9xl text-green-500">{displayTime}</p>
-        <div className="flex w-full bottom-0 justify-between px-3 absolute text-sm pb-2">
+        {/* <div className="flex w-full bottom-0 justify-between px-3 absolute text-sm pb-2">
           <ul className="flex flex-col justify-end text-green-800 font-light">
             <li>timevalue = {totalTime}</li>
             <li>current = {displayTime}</li>
@@ -93,7 +93,7 @@ function App() {
             <li>1a dec 2025</li>
             <li>13:41</li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   );
