@@ -3,8 +3,12 @@ import "./App.css";
 import useWindowDimensions from "./hooks/useWindowDimensions";
 
 function App() {
-  const [totalTime, _setTotalTime] = useState(50);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [totalTime, _setTotalTime] = useState(60);
+  const [barHeight, setBarHeight] = useState(0);
+  const [displayTime, setDisplayTime] = useState(0);
+  // const [currentTime, setCurrentTime] = useState(null);
+
+  const currentTime = useRef(fetchTime());
   const divider = 10;
   const yAxis = useRef(0);
   const { height } = useWindowDimensions();
@@ -12,28 +16,46 @@ function App() {
   function handlePress(e) {
     yAxis.current = e.clientY;
     const calculatedValue = (1 - yAxis.current / height) * 100;
-    setCurrentTime(calculatedValue);
+    currentTime.current = calculatedValue;
+    setDisplayTime(Math.round((currentTime.current / 100) * totalTime));
+    setBarHeight(currentTime.current);
+  }
+
+  async function fetchTime() {
+    return fetch("/api")
+      .then((resp) => resp.json())
+      .then((data) => data[0].remaining_minutes);
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime((prev) => {
-        return prev - 1 / divider;
+    let interval = null;
+    fetch("/api")
+      .then((resp) => resp.json())
+      .then((data) => {
+        currentTime.current = data[0].remaining_minutes;
+        setBarHeight(currentTime.current);
+        setDisplayTime(Math.round((currentTime.current / 100) * totalTime));
+
+        interval = setInterval(() => {
+          setBarHeight(currentTime.current);
+          currentTime.current -= 1 / divider;
+        }, (totalTime * 1000) / divider); // Avgör hur sällan baren ska droppas
       });
-    }, (totalTime * 1000) / divider); // Avgör hur sällan baren ska droppas
 
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    fetch("/api", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ remaining_minutes: currentTime }),
-    });
-  }, [currentTime]);
+    if (typeof currentTime.current === "number") {
+      fetch("/api", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ remaining_minutes: currentTime.current }),
+      });
+    }
+  }, [currentTime.current]);
 
   // skapa useeffect som laddar upp tid till backend vid tryck
 
@@ -52,16 +74,14 @@ function App() {
           "flex bg-green-400 w-[95lvw] rounded-t-xl relative justify-center items-center"
         }
         style={{
-          height: `${currentTime + "lvh"}`,
+          height: `${barHeight + "lvh"}`,
         }}
       >
-        <p className="text-9xl text-green-500">
-          {Math.round((currentTime / 100) * 10)}
-        </p>
+        <p className="text-9xl text-green-500">{displayTime}</p>
         <div className="flex w-full bottom-0 justify-between px-3 absolute text-sm pb-2">
           <ul className="flex flex-col justify-end text-green-800 font-light">
             <li>timevalue = {totalTime}</li>
-            <li>current = {(currentTime / 100) * 10}</li>
+            <li>current = {displayTime}</li>
           </ul>
           <ul className="flex flex-col items-end text-green-800 font-light">
             <li className="font-medium">Last changed </li>

@@ -19,7 +19,21 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/api", async (_request, response) => {
-  const { rows } = await client.query("SELECT * FROM timer");
+  const { rows } = await client.query("SELECT * FROM timer WHERE id = 1;");
+  response.send(rows);
+});
+
+app.post("/api", async (request, response) => {
+  const { remaining_minutes } = request.body;
+  const rounded = Math.round(remaining_minutes);
+  console.log(rounded);
+  const { rows } = await client.query(
+    `UPDATE timer
+       SET remaining_minutes = $1
+       WHERE id = 1
+       RETURNING *;`,
+    [rounded]
+  );
   response.send(rows);
 });
 
