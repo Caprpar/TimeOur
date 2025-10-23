@@ -13,12 +13,23 @@ function App() {
   const yAxis = useRef(0);
   const { height } = useWindowDimensions();
 
+  function updateTime() {
+    fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ remaining_minutes: currentTime.current }),
+    });
+  }
+
   function handlePress(e) {
     yAxis.current = e.clientY;
     const calculatedValue = (1 - yAxis.current / height) * 100;
     currentTime.current = calculatedValue;
     setDisplayTime(Math.round((currentTime.current / 100) * totalTime));
     setBarHeight(currentTime.current);
+    updateTime();
   }
 
   async function fetchTime() {
@@ -47,13 +58,7 @@ function App() {
 
   useEffect(() => {
     if (typeof currentTime.current === "number") {
-      fetch("/api", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ remaining_minutes: currentTime.current }),
-      });
+      updateTime();
     }
   }, [currentTime.current]);
 
