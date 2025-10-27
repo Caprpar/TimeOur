@@ -5,3 +5,5 @@ Content delivery network. Innebär att ens sida är tillgänglig från olika ser
 # Monitoring
 
 Monitoring innebär att man får en generell översikt för vad som händer på ens hemsida, hur mycket trafik den har och hur den presterar. Samt att den är tillgänglig och fungerar som den ska.
+
+added from server
